@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="signup">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="message_welcome_page">Bercerita dengan Lebih Mudah, Membuat Dunia Lebih Baik</string>
+    <string name="title_welcome_page">Welcome To Story App</string>
+    <string name="title_signup_page">SignUp</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="title_login_page">Login</string>
+    <string name="name">Nama</string>
+    <string name="message_main_page">Selamat Belajar di Dicoding.</string>
+    <string name="greeting">Halo %1$s,</string>
+    <string name="logout">Keluar</string>
+</resources>
