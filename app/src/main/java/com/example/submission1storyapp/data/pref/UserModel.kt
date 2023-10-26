@@ -1,4 +1,4 @@
-package com.example.submission1storyapp.view.data.pref
+package com.example.submission1storyapp.data.pref
 
 data class UserModel(
     val email: String,

@@ -1,11 +1,11 @@
-package com.example.submission1storyapp.view.View.main
+package com.example.submission1storyapp.view.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.submission1storyapp.view.data.UserRepository
-import com.example.submission1storyapp.view.data.pref.UserModel
+import com.example.submission1storyapp.data.UserRepository
+import com.example.submission1storyapp.data.pref.UserModel
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {

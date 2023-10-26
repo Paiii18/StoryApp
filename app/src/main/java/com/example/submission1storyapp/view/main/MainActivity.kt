@@ -1,4 +1,4 @@
-package com.example.submission1storyapp.view.View.main
+package com.example.submission1storyapp.view.main
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -10,10 +10,9 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
-import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivityMainBinding
-import com.example.submission1storyapp.view.View.ViewModelFactory
-import com.example.submission1storyapp.view.View.welcome.WelcomeActivity
+import com.example.submission1storyapp.view.ViewModelFactory
+import com.example.submission1storyapp.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {

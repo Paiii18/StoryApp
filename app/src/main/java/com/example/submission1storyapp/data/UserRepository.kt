@@ -1,7 +1,7 @@
-package com.example.submission1storyapp.view.data
+package com.example.submission1storyapp.data
 
-import com.example.submission1storyapp.view.data.pref.UserModel
-import com.example.submission1storyapp.view.data.pref.UserPreference
+import com.example.submission1storyapp.data.pref.UserModel
+import com.example.submission1storyapp.data.pref.UserPreference
 import kotlinx.coroutines.flow.Flow
 
 class UserRepository private constructor(
@@ -25,8 +25,8 @@ class UserRepository private constructor(
         fun getInstance(
             userPreference: UserPreference
         ): UserRepository =
-            instance?: synchronized(this) {
-                instance?: UserRepository(userPreference)
+            instance ?: synchronized(this) {
+                instance ?: UserRepository(userPreference)
             }.also { instance = it }
     }
 }

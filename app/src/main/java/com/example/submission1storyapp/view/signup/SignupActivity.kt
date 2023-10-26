@@ -1,4 +1,4 @@
-package com.example.submission1storyapp.view.View.signup
+package com.example.submission1storyapp.view.signup
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -44,7 +44,7 @@ class SignupActivity : AppCompatActivity() {
 
             AlertDialog.Builder(this).apply {
                 setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+                setMessage("Akun dengan $email sudah jadi nih. Mari Kita Ngontent")
                 setPositiveButton("Lanjut") { _, _ ->
                     finish()
                 }

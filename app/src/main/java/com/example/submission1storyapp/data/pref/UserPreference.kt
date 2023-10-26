@@ -1,4 +1,4 @@
-package com.example.submission1storyapp.view.data.pref
+package com.example.submission1storyapp.data.pref
 
 import android.content.Context
 import androidx.datastore.core.DataStore

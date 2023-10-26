@@ -1,4 +1,4 @@
-package com.example.submission1storyapp.view.View.login
+package com.example.submission1storyapp.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -11,11 +11,10 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivityLoginBinding
-import com.example.submission1storyapp.view.View.ViewModelFactory
-import com.example.submission1storyapp.view.View.main.MainActivity
-import com.example.submission1storyapp.view.data.pref.UserModel
+import com.example.submission1storyapp.view.ViewModelFactory
+import com.example.submission1storyapp.view.main.MainActivity
+import com.example.submission1storyapp.data.pref.UserModel
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
