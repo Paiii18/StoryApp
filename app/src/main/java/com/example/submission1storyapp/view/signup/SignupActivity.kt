@@ -9,22 +9,50 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
 
+    private lateinit var binding: ActivitySignupBinding
+    private lateinit var viewModel: SignUpViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(this)[SignUpViewModel::class.java]
+
+        viewModel.isLoading.observe(this) {
+            load(it)
+        }
+
+        initAction()
         setupView()
         setupAction()
         playAnimation()
     }
 
+    private fun initAction() {
+        binding.signupButton.setOnClickListener {
+          val name =  binding.nameEditText.text.toString().trim()
+          val email = binding.emailEditText.text.toString().trim()
+          val pass = binding.passwordEditText.text.toString().trim()
+
+          when {
+              name.isBlank() -> {
+                  binding.nameEditText.requestFocus()
+                  binding.nameEditText.error = getString(R.string.error_empty_email)
+              }
+              email.isBlank() -> {
+                  binding.emailEditText.requestFocus()
+                  binding.emailEditText.error = getString(R.string.)
+              }
+             !email.isEmailValid() -> {
+          }
+        }
+    }
     private fun setupView() {
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
