@@ -9,10 +9,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivityWelcomeBinding
 import com.example.submission1storyapp.view.login.LoginActivity
-import com.example.submission1storyapp.view.signup.SignupActivity
+import com.example.submission1storyapp.view.signup.SignUpActivity
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
@@ -46,7 +45,7 @@ class WelcomeActivity : AppCompatActivity() {
         }
 
         binding.signupButton.setOnClickListener {
-            startActivity(Intent(this, SignupActivity::class.java))
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
     }
 

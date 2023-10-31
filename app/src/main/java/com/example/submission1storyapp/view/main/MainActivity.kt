@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
-        setupAction()
-        playAnimation()
+//        setupAction()
+//        playAnimation()
     }
 
     private fun setupView() {
@@ -50,26 +50,26 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private fun setupAction() {
-        binding.logoutButton.setOnClickListener {
-            viewModel.logout()
-        }
-    }
+//    private fun setupAction() {
+//        binding.logoutButton.setOnClickListener {
+//            viewModel.logout()
+//        }
+//    }
 
-    private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
-
-        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
-        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
-        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(100)
-
-        AnimatorSet().apply {
-            playSequentially(name, message, logout)
-            startDelay = 100
-        }.start()
-    }
+//    private fun playAnimation() {
+//        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+//            duration = 6000
+//            repeatCount = ObjectAnimator.INFINITE
+//            repeatMode = ObjectAnimator.REVERSE
+//        }.start()
+//
+//        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
+//        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
+//        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(100)
+//
+//        AnimatorSet().apply {
+//            playSequentially(name, message, logout)
+//            startDelay = 100
+//        }.start()
+//    }
 }

@@ -1,5 +1,6 @@
 package com.example.submission1storyapp.view.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,21 +30,22 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     fun signIn(email: String, password: String) {
         _isLoading.value = true
 
-        val client = ApiConfig.getApiService().signIn(email, password)
+        val client = ApiConfig.getApiService().Login(email, password)
 
         client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(
+
                 call: Call<LoginResponse>,
                 response: Response<LoginResponse>,
             ) {
-                log.i("SignUpViewModel", "${response.code()}")
+                Log.i("SignUpViewModel", "${response.code()}")
 
                 if (response.isSuccessful) {
-                    log.i("SignUpViewModel", "Berhasil")
+                    Log.i("SignUpViewModel", "Berhasil")
 
                     val appResponse = response.body()
-                    saveSession(UserModel(token = appResponse?.token!!, isLogin = true))
-                    log.i(
+                    saveSession(UserModel(token = appResponse?.loginResult?.token!!, isLogin = true))
+                    Log.i(
                         "SignUpViewModel", "${appResponse}"
                     )
                     _isSuccess.value = true
@@ -56,7 +58,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                log.e("SignUpViewModel", "Gagal daftar: ${t.message}")
+                Log.e("SignUpViewModel", "Gagal daftar: ${t.message}")
                 _isLoading.postValue(false)
             }
         })

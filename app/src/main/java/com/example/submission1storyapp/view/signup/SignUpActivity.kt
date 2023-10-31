@@ -2,21 +2,20 @@ package com.example.submission1storyapp.view.signup
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivitySignupBinding
 
-class SignupActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
     private lateinit var viewModel: SignUpViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
@@ -29,56 +28,50 @@ class SignupActivity : AppCompatActivity() {
         }
 
         initAction()
-        setupView()
-        setupAction()
         playAnimation()
     }
 
     private fun initAction() {
         binding.signupButton.setOnClickListener {
-          val name =  binding.nameEditText.text.toString().trim()
-          val email = binding.emailEditText.text.toString().trim()
-          val pass = binding.passwordEditText.text.toString().trim()
+            val name = binding.nameEditText.text.toString().trim()
+            val email = binding.emailEditText.text.toString().trim()
+            val pass = binding.passwordEditText.text.toString().trim()
 
-          when {
-              name.isBlank() -> {
-                  binding.nameEditText.requestFocus()
-                  binding.nameEditText.error = getString(R.string.error_empty_email)
-              }
-              email.isBlank() -> {
-                  binding.emailEditText.requestFocus()
-                  binding.emailEditText.error = getString(R.string.)
-              }
-             !email.isEmailValid() -> {
-          }
-        }
-    }
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
-        supportActionBar?.hide()
-    }
-
-    private fun setupAction() {
-        binding.signupButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Mari Kita Ngontent")
-                setPositiveButton("Lanjut") { _, _ ->
-                    finish()
+            when {
+                name.isBlank() -> {
+                    binding.nameEditText.requestFocus()
+                    binding.nameEditText.error = getString(R.string.error_empty_name)
                 }
-                create()
-                show()
+                email.isBlank() -> {
+                    binding.emailEditText.requestFocus()
+                    binding.emailEditText.error = getString(R.string.error_empty_email)
+                }
+//                !email.isEmailValid() -> {
+//                    binding.emailEditText.requestFocus()
+//                    binding.emailEditText.error = getString(R.string.error_invalid_email)
+//                }
+//                else -> {
+//
+//                    viewModel.registerUser(name,email,pass)
+//                    Intent(this, LoginActivity::class.java)
+//                    startActivity(intent)
+//                }
             }
+        }
+    }
+
+    private fun load(result: Boolean) {
+        if (result) binding.progressBar.visibility = View.VISIBLE
+        else binding.progressBar.visibility = View.GONE
+    }
+
+//    private fun String.isEmailValid(): Boolean {
+//        return !TextUtils.isEmpty(this) && android.
+//    }
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, SignUpActivity::class.java)
+            context.startActivity(intent)
         }
     }
 
@@ -103,7 +96,6 @@ class SignupActivity : AppCompatActivity() {
         val passwordEditTextLayout =
             ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val signup = ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(100)
-
 
         AnimatorSet().apply {
             playSequentially(

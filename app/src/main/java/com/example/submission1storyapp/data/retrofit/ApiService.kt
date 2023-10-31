@@ -12,14 +12,14 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("login")
-    suspend fun login(
+     fun Login(
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<LoginResponse>
 
     @FormUrlEncoded
     @POST("register")
-    suspend fun register(
+    fun Signup(
         @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String,

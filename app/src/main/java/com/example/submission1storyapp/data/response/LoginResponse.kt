@@ -17,11 +17,11 @@ import com.google.gson.annotations.SerializedName
  class LoginResult(
 
 	@field:SerializedName("name")
-	val name: String,
+	val name: String? = null,
 
 	@field:SerializedName("userId")
-	val userId: String,
+	val userId: String? = null,
 
 	@field:SerializedName("token")
-	val token: String
+	val token: String? = null
 )
