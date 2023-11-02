@@ -1,38 +1,35 @@
-package com.example.submission1storyapp.view.main
+package com.example.submission1storyapp.view.addstory
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.submission1storyapp.data.UserRepository
 import com.example.submission1storyapp.data.pref.UserModel
-import com.example.submission1storyapp.data.response.ListStoryItem
-import com.example.submission1storyapp.data.response.StoryResponse
+import com.example.submission1storyapp.data.response.AddNewStoryResponse
 import com.example.submission1storyapp.data.retrofit.ApiConfig
-import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.Callback
 
-class MainViewModel(private val reps: UserRepository) : ViewModel() {
+class AddStoryViewModel (private val repository: UserRepository) : ViewModel() {
 
-    private val _listStories = MutableLiveData<List<ListStoryItem>>()
-    val listStories: LiveData<List<ListStoryItem>> = _listStories
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isSuccess = MutableLiveData<Boolean>(false)
+    val isSuccess: LiveData<Boolean> = _isSuccess
 
-    fun fetchListStories(token: String) {
-        Log.i("fetchListStories", "$token")
-        _isLoading.postValue(true)
-        val client = ApiConfig.getApiService().getStory("Bearer $token")
+    fun addStory(token: String, file: MultipartBody.Part, description : RequestBody){
+        _isLoading.value = true
+        val client = ApiConfig.getApiService().postStory("Bearer $token",file, description)
+        Log.i("AddStoryViewModel", "AddStoryViewModel: ${token} ")
 
-        client.enqueue(object : Callback<StoryResponse> {
+        client.enqueue(object : retrofit2.Callback<AddNewStoryResponse> {
             override fun onResponse(
-
-                call: Call<StoryResponse>,
-                response: retrofit2.Response<StoryResponse>,
+                call: Call<AddNewStoryResponse>,
+                response: retrofit2.Response<AddNewStoryResponse>,
             ) {
                 Log.i("AddStoryViewModel", "${response.code()}")
 
@@ -40,36 +37,27 @@ class MainViewModel(private val reps: UserRepository) : ViewModel() {
                     Log.i("AddStoryViewModel", "Berhasil")
 
                     val appResponse = response.body()
-                    val itemsList = appResponse?.listStory ?: emptyList()
-                    _listStories.postValue(itemsList as List<ListStoryItem>?)
                     Log.i(
                         "AddStoryViewModel", "${appResponse}"
                     )
+                    _isSuccess.value = true
                     _isLoading.value = false
 
                 } else {
-
                     _isLoading.value = false
                 }
-
                 _isLoading.postValue(false)
             }
 
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+            override fun onFailure(call: Call<AddNewStoryResponse>, t: Throwable) {
                 Log.e("AddStoryViewModel", "Gagal daftar: ${t.message}")
                 _isLoading.postValue(false)
             }
         })
 
     }
-
     fun getSession(): LiveData<UserModel> {
-        return reps.getSession().asLiveData()
+        return repository.getSession().asLiveData()
     }
 
-//    fun logout() {
-//        viewModelScope.launch {
-//            reps.logout()
-//        }
-//    }
 }

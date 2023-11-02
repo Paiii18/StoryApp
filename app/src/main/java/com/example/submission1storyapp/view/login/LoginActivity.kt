@@ -2,21 +2,28 @@ package com.example.submission1storyapp.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivityLoginBinding
 import com.example.submission1storyapp.view.ViewModelFactory
 import com.example.submission1storyapp.view.main.MainActivity
-import com.example.submission1storyapp.data.pref.UserModel
+import com.example.submission1storyapp.view.signup.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
+
     private val viewModel by viewModels<LoginViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -27,72 +34,109 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupView()
-        setupAction()
-        playAnimation()
-    }
-
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+        viewModel.isLoading.observe(this) {
+            load(it)
         }
-        supportActionBar?.hide()
+        initAction()
+        playAnim()
     }
 
-    private fun setupAction() {
-        binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-//            viewModel.saveSession(UserModel(email, "sample_token"))
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Anda berhasil login.")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
-                }
-                create()
-                show()
-            }
-        }
-    }
-
-    private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+    @SuppressLint("Recycle")
+    private fun playAnim() {
+        ObjectAnimator.ofFloat(binding.imgLogin, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
-        val emailTextView =
-            ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
-        val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val passwordTextView =
-            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
-        val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val title = ObjectAnimator.ofFloat(binding.tvLogin, View.ALPHA, 1f).setDuration(100)
+
+        val email = ObjectAnimator.ofFloat(binding.TVEmail, View.ALPHA, 1f).setDuration(100)
+        val inputEmail = ObjectAnimator.ofFloat(binding.ETemail, View.ALPHA, 1f).setDuration(100)
+
+        val password = ObjectAnimator.ofFloat(binding.TVPassword, View.ALPHA, 1f).setDuration(100)
+        val inputPassword = ObjectAnimator.ofFloat(binding.ETpass, View.ALPHA, 1f).setDuration(100)
+
         val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
+        val toRegister =
+            ObjectAnimator.ofFloat(binding.layoutTextRegister, View.ALPHA, 1f).setDuration(100)
+
+        val together = AnimatorSet().apply {
+            playTogether(title, email, inputEmail, password, inputPassword, login, toRegister)
+        }
 
         AnimatorSet().apply {
-            playSequentially(
-                title,
-                emailTextView,
-                emailEditTextLayout,
-                passwordTextView,
-                passwordEditTextLayout,
-                login
-            )
-            startDelay = 100
-        }.start()
+            playSequentially(title, email, inputEmail, password, inputPassword, login, toRegister)
+            start()
+        }
+    }
+
+    private fun initAction() {
+        binding.TvRegister.setOnClickListener {
+            SignUpActivity.start(this)
+        }
+        binding.loginButton.setOnClickListener {
+            val email = binding.emailEditText.text.toString().trim()
+            val pass = binding.passwordEditText.text.toString().trim()
+            when {
+                email.isBlank() -> {
+                    binding.emailEditText.requestFocus()
+                    binding.emailEditText.error = getString(R.string.error_empty_email)
+                }
+
+                !email.isEmailValid() -> {
+                    binding.emailEditText.requestFocus()
+                    binding.emailEditText.error = getString(R.string.error_invalid_email)
+                }
+
+                pass.isBlank() -> {
+                    binding.passwordEditText.requestFocus()
+                    binding.passwordEditText.error = getString(R.string.error_empty_password)
+                }
+
+                else -> {
+                    viewModel.signIn(email, pass)
+                    viewModel.isMessage.observe(this) { isMessage ->
+                        Log.i("test", "$isMessage")
+                        if (isMessage == getString(R.string.berhasil)) {
+                            messageToast(getString(R.string.berhasil_login))
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+
+                        }
+                        if (isMessage == getString(R.string.user_not_found)) {
+                            messageToast(getString(R.string.email_dan_password_tidak_terdaftar))
+
+                        }
+                        if (isMessage == getString(R.string.invalid_password)) {
+                            messageToast(getString(R.string.password_salah))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun messageToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun load(result: Boolean) {
+        if (result) binding.progressBar4.visibility = View.VISIBLE
+        else binding.progressBar4.visibility = View.GONE
+    }
+
+    private fun String.isEmailValid(): Boolean {
+        return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this)
+            .matches()
+    }
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 
 }

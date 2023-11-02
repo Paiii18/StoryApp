@@ -1,31 +1,55 @@
 package com.example.submission1storyapp.view.login
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.submission1storyapp.R
+import com.example.submission1storyapp.StoryListAdapter
 import com.example.submission1storyapp.data.UserRepository
 import com.example.submission1storyapp.data.pref.UserModel
+import com.example.submission1storyapp.data.response.ListStoryItem
 import com.example.submission1storyapp.data.response.LoginResponse
 import com.example.submission1storyapp.data.retrofit.ApiConfig
+import com.example.submission1storyapp.databinding.ActivityMainBinding
+import com.example.submission1storyapp.view.ViewModelFactory
+import com.example.submission1storyapp.view.addstory.AddStoryActivity
+import com.example.submission1storyapp.view.detailstory.DetailStoryActivity
+import com.example.submission1storyapp.view.main.MainViewModel
 import kotlinx.coroutines.launch
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginViewModel(private val repository: UserRepository) : ViewModel() {
+class LoginViewModel (private val repository: UserRepository) : ViewModel() {
+
     fun saveSession(user: UserModel) {
         viewModelScope.launch {
             repository.saveSession(user)
         }
     }
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> = _isLoading
+
 
     private val _isSuccess = MutableLiveData<Boolean>(false)
     val isSuccess: LiveData<Boolean> = _isSuccess
+
+    private val _isMessage = MutableLiveData<String>()
+    val isMessage: LiveData<String> = _isMessage
+
 
     fun signIn(email: String, password: String) {
         _isLoading.value = true
@@ -38,19 +62,30 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
                 call: Call<LoginResponse>,
                 response: Response<LoginResponse>,
             ) {
-                Log.i("SignUpViewModel", "${response.code()}")
+                Log.i("SignupViewModel", "${response.code()}")
 
                 if (response.isSuccessful) {
-                    Log.i("SignUpViewModel", "Berhasil")
 
                     val appResponse = response.body()
                     saveSession(UserModel(token = appResponse?.loginResult?.token!!, isLogin = true))
                     Log.i(
-                        "SignUpViewModel", "${appResponse}"
+                        "LoginViewModel", "${appResponse}"
                     )
                     _isSuccess.value = true
                     _isLoading.value = false
+                    _isMessage.value = appResponse.message!!
+
                 } else {
+
+                    val str = response.errorBody()!!.string()
+                    try {
+                        val json = JSONObject(str)
+
+                        _isMessage.value =
+                            json.getString("message")
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
 
                 }
 
@@ -58,9 +93,10 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Log.e("SignUpViewModel", "Gagal daftar: ${t.message}")
+                Log.e("SignupViewModel", "Gagal daftar: ${t.message}")
                 _isLoading.postValue(false)
             }
         })
     }
+
 }

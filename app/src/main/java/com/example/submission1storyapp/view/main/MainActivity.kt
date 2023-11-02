@@ -1,20 +1,28 @@
 package com.example.submission1storyapp.view.main
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.submission1storyapp.R
+import com.example.submission1storyapp.StoryListAdapter
+import com.example.submission1storyapp.data.response.ListStoryItem
 import com.example.submission1storyapp.databinding.ActivityMainBinding
 import com.example.submission1storyapp.view.ViewModelFactory
-import com.example.submission1storyapp.view.welcome.WelcomeActivity
+import com.example.submission1storyapp.view.addstory.AddStoryActivity
+import com.example.submission1storyapp.view.detailstory.DetailStoryActivity
+import com.example.submission1storyapp.view.login.LoginActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), StoryListAdapter.OnItemClickListener {
+
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -25,51 +33,61 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin) {
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
+        viewModel.getSession().observe(this) { setting ->
+            if (setting.token.isNotEmpty()) {
+                Log.i("ListStoryActivity", "setupAction: ${setting.token}")
+                viewModel.fetchListStories(setting.token)
             }
         }
 
-        setupView()
-//        setupAction()
-//        playAnimation()
-    }
+        val recyclerView = binding.root.findViewById<RecyclerView>(R.id.rvListstory)
+        val adapter = StoryListAdapter(this)
 
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.progressBar2.visibility = View.VISIBLE
+            } else {
+                binding.progressBar2.visibility = View.GONE
+            }
         }
-        supportActionBar?.hide()
+
+        viewModel.listStories.observe(this) { items ->
+            adapter.submitList(items)
+        }
+        setupAction()
     }
 
-//    private fun setupAction() {
-//        binding.logoutButton.setOnClickListener {
-//            viewModel.logout()
-//        }
-//    }
 
-//    private fun playAnimation() {
-//        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-//            duration = 6000
-//            repeatCount = ObjectAnimator.INFINITE
-//            repeatMode = ObjectAnimator.REVERSE
-//        }.start()
-//
-//        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
-//        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
-//        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(100)
-//
-//        AnimatorSet().apply {
-//            playSequentially(name, message, logout)
-//            startDelay = 100
-//        }.start()
-//    }
+    private fun setupAction() {
+//        binding.imgLogout.setOnClickListener {
+//            viewModel.logout()
+//            val intent = Intent(this, LoginActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
+        binding.fabAdd.setOnClickListener {
+            val intent = Intent(this, AddStoryActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    companion object {
+
+        fun start(context: Context) {
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
+
+    override fun onItemClick(item: ListStoryItem) {
+        val id = item.id
+        val intent = Intent(this, DetailStoryActivity::class.java)
+        intent.putExtra(DetailStoryActivity.EXTRA_NAME, id)
+        startActivity(intent)
+    }
 }

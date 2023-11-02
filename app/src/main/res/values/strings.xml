@@ -12,13 +12,34 @@
     <string name="message_main_page">Selamat Belajar di Dicoding.</string>
     <string name="greeting">Halo %1$s,</string>
     <string name="logout">Keluar</string>
+    <string name="belum_punya_akun">Durung due akun?</string>
+    <string name="daftar_akun">Daftar nang kene</string>
+    <string name="sudah_punya_akun">Wis due akun?</string>
+    <string name="login_akun">Login nang kene</string>
+    <string name="upload">Upload</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="deskripsi">Keterangan</string>
+    <string name="add_story">Stroy sudah di upload</string>
+    <string name="judul_story">Judul Story</string>
+    <string name="deskripsi_story">Tuliskan Cerita Disini</string>
 
     <string name="dialog_error">Oops sepertinya ada yang salah</string>
     <string name="error_empty_email">Masukkan Email Anda</string>
     <string name="error_empty_password">Masukkan Password Anda</string>
+    <string name="error_short_password">Password harus memiliki panjang minimal 8 karakter</string>
     <string name="message_incorrect_auth">Email atau password anda salah</string>
     <string name="message_unknown_state">Status Eror</string>
     <string name="error_empty_name">Masukkan Nama Anda</string>
     <string name="error_invalid_email">Email anda tidak valid!</string>
     <string name="message_register_success">Daftar Berhasil</string>
+    <string name="success">User created</string>
+    <string name="email_is_already_taken">Email is already taken</string>
+    <string name="email_sudah_ada">Email Sudah digunakan</string>
+    <string name="berhasil">success</string>
+    <string name="berhasil_login">Berhasil Login</string>
+    <string name="user_not_found">User not found</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="email_dan_password_tidak_terdaftar">Email Dan Password Tidak Terdaftar</string>
+    <string name="password_salah">Password Salah</string>
 </resources>

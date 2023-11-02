@@ -5,4 +5,5 @@
     <color name="pink_500">#D81B60</color>
     <color name="pink_200">#FF8FAF</color>
     <color name="navy">#2D3D4F</color>
+    <color name="transparent">#00000000</color>
 </resources>
