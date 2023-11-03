@@ -27,7 +27,7 @@ class MainViewModel(private val reps: UserRepository) : ViewModel() {
         Log.i("fetchListStories", "$token")
         _isLoading.postValue(true)
         val client = ApiConfig.getApiService().getStory("Bearer $token")
-
+        Log.i("testApi", "Bearer $token")
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(
 
@@ -67,9 +67,9 @@ class MainViewModel(private val reps: UserRepository) : ViewModel() {
         return reps.getSession().asLiveData()
     }
 
-//    fun logout() {
-//        viewModelScope.launch {
-//            reps.logout()
-//        }
-//    }
+    fun logout() {
+        viewModelScope.launch {
+            reps.logout()
+        }
+    }
 }

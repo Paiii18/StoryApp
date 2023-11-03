@@ -61,5 +61,4 @@ class DetailStoryViewModel(private val repository: UserRepository) : ViewModel()
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
-
 }

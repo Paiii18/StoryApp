@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/ViewImage"
-            android:layout_width="365dp"
-            android:layout_height="149dp"
+            android:layout_width="357dp"
+            android:layout_height="271dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:scaleType="centerCrop"
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.7647059" />
+            app:layout_constraintGuide_percent="0.66" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputLayout"
@@ -135,7 +135,6 @@
             tools:visibility="visible"
             android:visibility="gone"
             android:indeterminate="true"
-            android:indeterminateTint="@android:color/black"
-            />
+            android:indeterminateTint="@android:color/black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -93,5 +93,4 @@ fun Bitmap.getRotatedBitmap(file: File): Bitmap? {
         ExifInterface.ORIENTATION_NORMAL -> this
         else -> this
     }
-
 }

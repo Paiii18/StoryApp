@@ -64,12 +64,12 @@ class MainActivity : AppCompatActivity(), StoryListAdapter.OnItemClickListener {
 
 
     private fun setupAction() {
-//        binding.imgLogout.setOnClickListener {
-//            viewModel.logout()
-//            val intent = Intent(this, LoginActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
+        binding.imgLogout.setOnClickListener {
+            viewModel.logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
         binding.fabAdd.setOnClickListener {
             val intent = Intent(this, AddStoryActivity::class.java)
             startActivity(intent)

@@ -1,19 +1,13 @@
 package com.example.submission1storyapp
 
-import android.app.Activity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.submission1storyapp.data.response.ListStoryItem
 import com.example.submission1storyapp.databinding.ItemStoryBinding
-import com.example.submission1storyapp.view.detailstory.DetailStoryActivity
 
 class StoryListAdapter (private val onItemClickListener: OnItemClickListener) :
     ListAdapter<ListStoryItem, StoryListAdapter.MyViewHolder>(DIFF_CALLBACK) {
@@ -64,5 +58,4 @@ class StoryListAdapter (private val onItemClickListener: OnItemClickListener) :
             }
         }
     }
-
 }

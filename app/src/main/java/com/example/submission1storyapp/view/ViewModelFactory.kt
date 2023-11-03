@@ -48,5 +48,4 @@ class ViewModelFactory (private val reps: UserRepository) : ViewModelProvider.Ne
             return INSTANCE as ViewModelFactory
         }
     }
-
 }
