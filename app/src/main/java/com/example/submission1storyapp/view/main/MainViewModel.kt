@@ -25,7 +25,8 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun fetchListStories(token: String) {
         _isLoading.postValue(true)
-        val client = ApiConfig.getApiService(token).getStory()
+        Log.i("MainViewModel", "token:$token ")
+        val client = ApiConfig.getApiService().getStory(token = "Bearer $token")
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(
 

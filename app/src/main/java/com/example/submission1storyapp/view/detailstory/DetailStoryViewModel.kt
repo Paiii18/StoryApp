@@ -23,7 +23,7 @@ class DetailStoryViewModel(private val repository: UserRepository) : ViewModel()
     fun getStory(token: String, id: String) {
 
         _isLoading.postValue(true)
-        val client = ApiConfig.getApiService(token).getDetailStory(id)
+        val client = ApiConfig.getApiService().getDetailStory(token = "Bearer $token",id)
 
         client.enqueue(object : Callback<DetailStoryResponse> {
             override fun onResponse(

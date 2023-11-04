@@ -23,6 +23,7 @@ import com.example.submission1storyapp.view.main.MainActivity
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
@@ -95,45 +96,37 @@ class AddStoryActivity : AppCompatActivity() {
             startGallery()
         }
 
-        binding.btnUpload.setOnClickListener {
+        binding.btnUpload.setOnClickListener{
             val description = binding.addDeskripsi.text.toString()
             val requestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
 
             if (currentImageUri == null && currentImageBitmap == null) {
-                Toast.makeText(this, "Silakan ambil foto terlebih dahulu", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Silakan ambil foto terlebih dahulu", Toast.LENGTH_SHORT).show()
             } else if (description.isEmpty()) {
                 Toast.makeText(this, "Silakan isi deskripsi cerita", Toast.LENGTH_SHORT).show()
             } else {
                 val imageFile = currentImageUri?.let { uri ->
                     uriToFile(uri, this).reduceFileImage()
                 } ?: currentImageBitmap?.let { bitmap ->
+                    // Simpan gambar dari currentImageBitmap ke file (contoh: internal storage)
                     val imageFile = saveBitmapToFile(bitmap)
+                    // Selanjutnya, gunakan imageFile untuk mengunggah gambar
                     imageFile
                 }
 
-                        val imgPart = MultipartBody.Part.createFormData(
-                            "photo", imageFile?.name ?: "default_filename", RequestBody.create(
-                                "image/*".toMediaTypeOrNull(),
-                                imageFile!!
-                            )
-                        )
-                Log.i("AddStoryActivity", "$imgPart, $requestBody"  )
-
-//                viewModel.getSession().observe(this) { setting ->
-//                    if (setting.token.isNotEmpty()) {
-//                        val imgPart = MultipartBody.Part.createFormData(
-//                            "photo", imageFile?.name ?: "default_filename", RequestBody.create(
-//                                "image/*".toMediaTypeOrNull(),
-//                                imageFile!!
-//                            )
-//                        )
-//                        viewModel.addStory(setting.token, imgPart, requestBody)
-//                    }
-//                    messageToast(getString(R.string.storry_added))
-//                }
+                viewModel.getSession().observe(this) { setting ->
+                    if (setting.token.isNotEmpty()) {
+                        val imgPart = MultipartBody.Part.createFormData("photo", imageFile?.name ?: "default_filename", RequestBody.create("image/*".toMediaTypeOrNull(),
+                            imageFile!!
+                        ))
+                        viewModel.addStory(setting.token, imgPart, requestBody)
+                    }
+                    messageToast(getString(R.string.storry_added))
+                }
             }
         }
+
+
 
     }
 
