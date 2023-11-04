@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), StoryListAdapter.OnItemClickListener {
 
         viewModel.getSession().observe(this) { setting ->
             if (setting.token.isNotEmpty()) {
-                Log.i("MainActivity", "setupAction: ${setting.token}")
+                Log.i("`MainActivity`", "setupAction: ${setting.token}")
                 viewModel.fetchListStories(setting.token)
             }
         }

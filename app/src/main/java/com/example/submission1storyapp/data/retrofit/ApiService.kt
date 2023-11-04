@@ -21,9 +21,9 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("login")
-     fun Login(
+    fun Login(
         @Field("email") email: String,
-        @Field("password") password: String
+        @Field("password") password: String,
     ): Call<LoginResponse>
 
     @FormUrlEncoded
@@ -35,15 +35,22 @@ interface ApiService {
     ): Call<RegisterResponse>
 
     @Multipart
-    @POST("addstory")
+    @POST("stories")
     fun postStory(
+        @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
-        @Part("Description") description: RequestBody,
+        @Part("description") description: RequestBody,
     ): Call<AddNewStoryResponse>
+
     @GET("stories")
     fun getStory(
-    ): Call<StoryResponse>
+        @Header("Authorization") token: String,
+        ): Call<StoryResponse>
+
     @GET("stories/{id}")
     fun getDetailStory(
-        @Path("id") id: String): Call<DetailStoryResponse>
+        @Header("Authorization") token: String,
+
+        @Path("id") id: String,
+    ): Call<DetailStoryResponse>
 }

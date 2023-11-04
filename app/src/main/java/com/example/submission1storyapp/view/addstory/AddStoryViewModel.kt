@@ -27,7 +27,7 @@ class AddStoryViewModel (private val repository: UserRepository) : ViewModel() {
 
     fun addStory(token: String, file: MultipartBody.Part, description : RequestBody ){
         _isLoading.value = true
-        val client = ApiConfig.getApiService(token = token).postStory(file, description)
+        val client = ApiConfig.getApiService().postStory(token = "Bearer $token",file, description)
         Log.i("AddStoryViewModel", "AddStoryViewModel: ${token} ")
 
         client.enqueue(object : retrofit2.Callback<AddNewStoryResponse> {

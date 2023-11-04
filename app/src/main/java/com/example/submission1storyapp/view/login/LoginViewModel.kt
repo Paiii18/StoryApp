@@ -54,7 +54,7 @@ class LoginViewModel (private val repository: UserRepository) : ViewModel() {
                     val appResponse = response.body()
                     saveSession(UserModel(token = appResponse?.loginResult?.token!!, isLogin = true))
                     Log.i(
-                        "LoginViewModel", "${appResponse}"
+                        "LoginViewModel", "${appResponse?.loginResult?.token!!}"
                     )
                     _isSuccess.value = true
                     _isLoading.value = false
