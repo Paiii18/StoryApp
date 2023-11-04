@@ -72,7 +72,7 @@ fun File.reduceFileImage(): File {
     val bitmap = BitmapFactory.decodeFile(file.path).getRotatedBitmap(file)
     var compressQuality = 100
     var streamLength: Int
-    do {
+    do  {
         val bmpStream = ByteArrayOutputStream()
         bitmap?.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
         val bmpPicByteArray = bmpStream.toByteArray()

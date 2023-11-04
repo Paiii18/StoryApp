@@ -37,14 +37,13 @@ interface ApiService {
     @Multipart
     @POST("addstory")
     fun postStory(
-        @Header("Authorization")token: String,
         @Part file: MultipartBody.Part,
         @Part("Description") description: RequestBody,
     ): Call<AddNewStoryResponse>
     @GET("stories")
-    fun getStory(@Header("Authorization")token : String
+    fun getStory(
     ): Call<StoryResponse>
     @GET("stories/{id}")
-    fun getDetailStory(@Header("Authorization")token : String,
+    fun getDetailStory(
         @Path("id") id: String): Call<DetailStoryResponse>
 }

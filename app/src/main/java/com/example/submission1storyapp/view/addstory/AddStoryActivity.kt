@@ -112,18 +112,26 @@ class AddStoryActivity : AppCompatActivity() {
                     imageFile
                 }
 
-                viewModel.getSession().observe(this) { setting ->
-                    if (setting.token.isNotEmpty()) {
                         val imgPart = MultipartBody.Part.createFormData(
                             "photo", imageFile?.name ?: "default_filename", RequestBody.create(
                                 "image/*".toMediaTypeOrNull(),
                                 imageFile!!
                             )
                         )
-                        viewModel.addStory(setting.token, imgPart, requestBody)
-                    }
-                    messageToast(getString(R.string.storry_added))
-                }
+                Log.i("AddStoryActivity", "$imgPart, $requestBody"  )
+
+//                viewModel.getSession().observe(this) { setting ->
+//                    if (setting.token.isNotEmpty()) {
+//                        val imgPart = MultipartBody.Part.createFormData(
+//                            "photo", imageFile?.name ?: "default_filename", RequestBody.create(
+//                                "image/*".toMediaTypeOrNull(),
+//                                imageFile!!
+//                            )
+//                        )
+//                        viewModel.addStory(setting.token, imgPart, requestBody)
+//                    }
+//                    messageToast(getString(R.string.storry_added))
+//                }
             }
         }
 
@@ -134,7 +142,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun saveBitmapToFile(bitmap: Bitmap): File {
-        val fileName = "gallery.jpg"
+        val fileName = "dummy.jpg"
         val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName)
 
         try {

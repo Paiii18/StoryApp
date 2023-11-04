@@ -1,30 +1,15 @@
 package com.example.submission1storyapp.view.login
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
+
 import android.util.Log
-import android.view.View
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.submission1storyapp.R
-import com.example.submission1storyapp.StoryListAdapter
 import com.example.submission1storyapp.data.UserRepository
 import com.example.submission1storyapp.data.pref.UserModel
-import com.example.submission1storyapp.data.response.ListStoryItem
 import com.example.submission1storyapp.data.response.LoginResponse
 import com.example.submission1storyapp.data.retrofit.ApiConfig
-import com.example.submission1storyapp.databinding.ActivityMainBinding
-import com.example.submission1storyapp.view.ViewModelFactory
-import com.example.submission1storyapp.view.addstory.AddStoryActivity
-import com.example.submission1storyapp.view.detailstory.DetailStoryActivity
-import com.example.submission1storyapp.view.main.MainViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject

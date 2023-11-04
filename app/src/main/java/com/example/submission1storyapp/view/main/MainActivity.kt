@@ -2,12 +2,9 @@ package com.example.submission1storyapp.view.main
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +32,7 @@ class MainActivity : AppCompatActivity(), StoryListAdapter.OnItemClickListener {
 
         viewModel.getSession().observe(this) { setting ->
             if (setting.token.isNotEmpty()) {
-                Log.i("ListStoryActivity", "setupAction: ${setting.token}")
+                Log.i("MainActivity", "setupAction: ${setting.token}")
                 viewModel.fetchListStories(setting.token)
             }
         }

@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 
-class MainViewModel(private val reps: UserRepository) : ViewModel() {
+class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _listStories = MutableLiveData<List<ListStoryItem>>()
     val listStories: LiveData<List<ListStoryItem>> = _listStories
@@ -24,10 +24,8 @@ class MainViewModel(private val reps: UserRepository) : ViewModel() {
 
 
     fun fetchListStories(token: String) {
-        Log.i("fetchListStories", "$token")
         _isLoading.postValue(true)
-        val client = ApiConfig.getApiService().getStory("Bearer $token")
-        Log.i("testApi", "Bearer $token")
+        val client = ApiConfig.getApiService(token).getStory()
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(
 
@@ -37,14 +35,12 @@ class MainViewModel(private val reps: UserRepository) : ViewModel() {
                 Log.i("AddStoryViewModel", "${response.code()}")
 
                 if (response.isSuccessful) {
-                    Log.i("AddStoryViewModel", "Berhasil")
+
 
                     val appResponse = response.body()
                     val itemsList = appResponse?.listStory ?: emptyList()
                     _listStories.postValue(itemsList as List<ListStoryItem>?)
-                    Log.i(
-                        "AddStoryViewModel", "${appResponse}"
-                    )
+
                     _isLoading.value = false
 
                 } else {
@@ -64,12 +60,12 @@ class MainViewModel(private val reps: UserRepository) : ViewModel() {
     }
 
     fun getSession(): LiveData<UserModel> {
-        return reps.getSession().asLiveData()
+        return repository.getSession().asLiveData()
     }
 
     fun logout() {
         viewModelScope.launch {
-            reps.logout()
+            repository.logout()
         }
     }
 }
