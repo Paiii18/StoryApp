@@ -15,11 +15,11 @@ import com.example.submission1storyapp.view.main.MainActivity
 @SuppressLint("SplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<SplashScreenViewModel>{
+    private val viewModel by viewModels<SplashScreenViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
-    private lateinit var binding : ActivitySplashScreenBinding
+    private lateinit var binding: ActivitySplashScreenBinding
 
     private val splashTimeOut: Long = 2000
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.getSession().observe(this) {user ->
+            viewModel.getSession().observe(this) { user ->
                 if (!user.isLogin) {
                     startActivity(Intent(this, LoginActivity::class.java))
                 } else {

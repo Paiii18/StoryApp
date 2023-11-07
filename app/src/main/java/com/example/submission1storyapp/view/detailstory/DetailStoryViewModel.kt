@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.example.submission1storyapp.data.UserRepository
+import com.example.submission1storyapp.data.repository.UserRepository
 import com.example.submission1storyapp.data.pref.UserModel
 import com.example.submission1storyapp.data.response.DetailStoryResponse
 import com.example.submission1storyapp.data.response.Story
@@ -23,7 +23,7 @@ class DetailStoryViewModel(private val repository: UserRepository) : ViewModel()
     fun getStory(token: String, id: String) {
 
         _isLoading.postValue(true)
-        val client = ApiConfig.getApiService().getDetailStory(token = "Bearer $token",id)
+        val client = ApiConfig.getApiService().getDetailStory(token = "Bearer $token", id)
 
         client.enqueue(object : Callback<DetailStoryResponse> {
             override fun onResponse(

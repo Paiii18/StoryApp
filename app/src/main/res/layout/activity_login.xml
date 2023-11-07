@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/TVEmail"
         app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.submission1storyapp.view.customview.CustomViewEmail
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/TVPassword"
         app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.submission1storyapp.view.customview.CustomViewPass
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -135,23 +135,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintGuide_begin="59dp"
         app:layout_constraintStart_toStartOf="parent" />
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutTextRegister"
-        android:alpha="0"
-        tools:alpha="100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/tvIsHaventAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/belum_punya_akun"/>
+            android:text="@string/belum_punya_akun"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/TvRegister"
@@ -160,9 +159,11 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginStart="8dp"
-            android:text="@string/daftar_akun"/>
+            android:text="@string/daftar_akun"
+            app:layout_constraintStart_toEndOf="@+id/tvIsHaventAccount"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar4"
         style="?android:attr/progressBarStyle"

@@ -43,4 +43,11 @@
     <string name="invalid_password">Invalid password</string>
     <string name="email_dan_password_tidak_terdaftar">Email Dan Password Tidak Terdaftar</string>
     <string name="password_salah">Password Salah</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satellite</string>
+    <string name="terrain_type">Terrain</string>
+    <string name="hybrid_type">Hybrid</string>
+    <string name="time_out">Time Out</string>
+    <string name="try_again">Try Again</string>
 </resources>

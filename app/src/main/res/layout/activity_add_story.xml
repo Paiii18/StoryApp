@@ -7,7 +7,7 @@
     tools:context=".view.addstory.AddStoryActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ViewImage"
@@ -22,7 +22,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/dummy" />
+            app:srcCompat="@drawable/dummy"
+            android:contentDescription=""/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

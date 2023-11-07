@@ -16,14 +16,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivityAddStoryBinding
-import com.example.submission1storyapp.reduceFileImage
-import com.example.submission1storyapp.uriToFile
+import com.example.submission1storyapp.setting.reduceFileImage
+import com.example.submission1storyapp.setting.uriToFile
 import com.example.submission1storyapp.view.ViewModelFactory
 import com.example.submission1storyapp.view.main.MainActivity
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
@@ -96,12 +95,13 @@ class AddStoryActivity : AppCompatActivity() {
             startGallery()
         }
 
-        binding.btnUpload.setOnClickListener{
+        binding.btnUpload.setOnClickListener {
             val description = binding.addDeskripsi.text.toString()
             val requestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
 
             if (currentImageUri == null && currentImageBitmap == null) {
-                Toast.makeText(this, "Silakan ambil foto terlebih dahulu", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Silakan ambil foto terlebih dahulu", Toast.LENGTH_SHORT)
+                    .show()
             } else if (description.isEmpty()) {
                 Toast.makeText(this, "Silakan isi deskripsi cerita", Toast.LENGTH_SHORT).show()
             } else {
@@ -116,16 +116,18 @@ class AddStoryActivity : AppCompatActivity() {
 
                 viewModel.getSession().observe(this) { setting ->
                     if (setting.token.isNotEmpty()) {
-                        val imgPart = MultipartBody.Part.createFormData("photo", imageFile?.name ?: "default_filename", RequestBody.create("image/*".toMediaTypeOrNull(),
-                            imageFile!!
-                        ))
+                        val imgPart = MultipartBody.Part.createFormData(
+                            "photo", imageFile?.name ?: "default_filename", RequestBody.create(
+                                "image/*".toMediaTypeOrNull(),
+                                imageFile!!
+                            )
+                        )
                         viewModel.addStory(setting.token, imgPart, requestBody)
                     }
                     messageToast(getString(R.string.storry_added))
                 }
             }
         }
-
 
 
     }
@@ -173,7 +175,6 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun load(result: Boolean) {
-        if (result) binding.progressBar.visibility = View.VISIBLE
-        else binding.progressBar.visibility = View.GONE
+        binding.progressBar.visibility = if (result) View.VISIBLE else View.GONE
     }
 }
