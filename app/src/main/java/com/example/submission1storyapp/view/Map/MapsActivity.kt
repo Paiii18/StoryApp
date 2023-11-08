@@ -87,6 +87,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     )
 
     private fun addManyMaker() {
+        val myPlace = mutableListOf<Place>()
 
         viewModel.listStories.observe(this) { items ->
             items.forEach { result ->
@@ -99,28 +100,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 boundsBuilder.include(latLng)
             }
 
+            val bounds: LatLngBounds = boundsBuilder.build()
+            mMap.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    bounds,
+                    resources.displayMetrics.widthPixels,
+                    resources.displayMetrics.heightPixels,
+                    300
+                )
+            )
         }
 
-        val myPlace = listOf(
-            Place("Kampus Saya", -6.295191, 106.861203),
-            Place("Kampung Halaman", -7.6374054, 108.4211446),
-        )
+        myPlace.add(Place("Kampus Saya", -6.295191, 106.861203))
+        myPlace.add(Place("Kampung Halaman", -7.6374054, 108.4211446))
 
         myPlace.forEach { place ->
             val latLng = LatLng(place.latitude, place.longitude)
             mMap.addMarker(MarkerOptions().position(latLng).title(place.name))
             boundsBuilder.include(latLng)
         }
-
-        val bounds: LatLngBounds = boundsBuilder.build()
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngBounds(
-                bounds,
-                resources.displayMetrics.widthPixels,
-                resources.displayMetrics.heightPixels,
-                300
-            )
-        )
     }
 
 

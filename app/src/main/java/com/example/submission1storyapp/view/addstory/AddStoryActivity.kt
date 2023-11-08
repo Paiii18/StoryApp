@@ -1,7 +1,9 @@
 package com.example.submission1storyapp.view.addstory
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +16,9 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.submission1storyapp.R
 import com.example.submission1storyapp.databinding.ActivityAddStoryBinding
 import com.example.submission1storyapp.setting.reduceFileImage
@@ -65,7 +70,6 @@ class AddStoryActivity : AppCompatActivity() {
         viewModel.uploadSuccess.observe(this) { success ->
             if (success) {
                 // Proses upload berhasil, pindahkan ke MainActivity
-                Log.d("UploadSuccess", "Proses upload berhasil")
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
@@ -79,29 +83,36 @@ class AddStoryActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == requestImageCapture && resultCode == RESULT_OK) {
+            // Gambar yang diambil dari kamera akan ada dalam data
             currentImageBitmap = data?.extras?.get("data") as Bitmap
 
+            // Set gambar ke ImageView
             binding.ViewImage.setImageBitmap(currentImageBitmap)
         }
     }
 
     private fun initAction() {
 
-        binding.btnCamera.setOnClickListener {
-            dispatchTakePictureIntent()
+        binding.btnCamera.setOnClickListener{
+            if (checkCameraPermission()) {
+                // Izin kamera sudah diberikan
+                dispatchTakePictureIntent()
+            } else {
+                // Izin kamera belum diberikan, tampilkan permintaan izin
+                requestCameraPermission()
+            }
         }
 
-        binding.btnGallery.setOnClickListener {
+        binding.btnGallery.setOnClickListener{
             startGallery()
         }
 
-        binding.btnUpload.setOnClickListener {
+        binding.btnUpload.setOnClickListener{
             val description = binding.addDeskripsi.text.toString()
             val requestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
 
             if (currentImageUri == null && currentImageBitmap == null) {
-                Toast.makeText(this, "Silakan ambil foto terlebih dahulu", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Silakan ambil foto terlebih dahulu", Toast.LENGTH_SHORT).show()
             } else if (description.isEmpty()) {
                 Toast.makeText(this, "Silakan isi deskripsi cerita", Toast.LENGTH_SHORT).show()
             } else {
@@ -116,19 +127,15 @@ class AddStoryActivity : AppCompatActivity() {
 
                 viewModel.getSession().observe(this) { setting ->
                     if (setting.token.isNotEmpty()) {
-                        val imgPart = MultipartBody.Part.createFormData(
-                            "photo", imageFile?.name ?: "default_filename", RequestBody.create(
-                                "image/*".toMediaTypeOrNull(),
-                                imageFile!!
-                            )
-                        )
+                        val imgPart = MultipartBody.Part.createFormData("photo", imageFile?.name ?: "default_filename", RequestBody.create("image/*".toMediaTypeOrNull(),
+                            imageFile!!
+                        ))
                         viewModel.addStory(setting.token, imgPart, requestBody)
                     }
                     messageToast(getString(R.string.storry_added))
                 }
             }
         }
-
 
     }
 
@@ -152,15 +159,55 @@ class AddStoryActivity : AppCompatActivity() {
         return file
     }
 
+    private fun requestCameraPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+            // Menampilkan pesan kepada pengguna mengapa izin kamera diperlukan
+            showPermissionExplanation()
+        } else {
+            // Meminta izin kamera langsung
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), cameraPermissionRequest)
+        }
+    }
+
+    private fun showPermissionExplanation() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Aplikasi ini memerlukan izin kamera untuk mengambil foto.")
+            .setPositiveButton("Izinkan") { dialog, id ->
+                ActivityCompat.requestPermissions(this@AddStoryActivity, arrayOf(Manifest.permission.CAMERA), cameraPermissionRequest)
+            }
+            .setNegativeButton("Tolak") { dialog, id ->
+
+            }
+        builder.create().show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == cameraPermissionRequest) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Izin kamera telah diberikan
+                dispatchTakePictureIntent()
+            } else {
+                // Izin kamera ditolak oleh pengguna
+            }
+        }
+    }
+
     @SuppressLint("QueryPermissionsNeeded")
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             startActivityForResult(takePictureIntent, requestImageCapture)
         } else {
+            // Aplikasi kamera tidak ditemukan
             Toast.makeText(this, "Aplikasi kamera tidak tersedia.", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun checkCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+    }
+
 
     private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -175,6 +222,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun load(result: Boolean) {
-        binding.progressBar.visibility = if (result) View.VISIBLE else View.GONE
+        if (result) binding.progressBar.visibility = View.VISIBLE
+        else binding.progressBar.visibility = View.GONE
     }
 }
