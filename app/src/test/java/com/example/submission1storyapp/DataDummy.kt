@@ -1,4 +1,4 @@
-package com.example.submission1storyapp.view
+package com.example.submission1storyapp
 
 import com.example.submission1storyapp.data.database.Entities
 

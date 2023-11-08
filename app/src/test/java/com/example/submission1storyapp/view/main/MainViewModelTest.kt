@@ -1,24 +1,32 @@
 package com.example.submission1storyapp.view.main
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+
 import androidx.recyclerview.widget.ListUpdateCallback
+import com.example.submission1storyapp.DataDummy
 import com.example.submission1storyapp.adapter.StoryListAdapter
 import com.example.submission1storyapp.data.database.Entities
 import com.example.submission1storyapp.data.repository.UserRepository
-import com.example.submission1storyapp.view.DataDummy
+import com.example.submission1storyapp.getOrAwaitValue
 import com.example.submission1storyapp.view.MainDispatcherRule
-import com.example.submission1storyapp.view.getOrAwaitValue
+
+import com.example.submission1storyapp.view.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
